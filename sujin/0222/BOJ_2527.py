@@ -6,21 +6,20 @@
 # b: 선으로 겹침
 # c: 꼭짓점만 겹침
 # d: 안겹침
-final = [['d', 'd', 'd'], ['d', 'c', 'b'], ['d', 'b', 'a']]
-    x1, y1, x2, y2, x3, y3, x4, y4 = map(int, input().split())
+for i in range(4):
+    x1,y1,p1,q1,x2,y2,p2,q2 = map(int, input().split())
 
-    if x2 < x3 or x4<x1:
-        x_intersection = 0
-    elif x2 == x3 or x4 == x1:
-        x_intersection = 1
+    # d: 안겹침
+    if p1 < x2 or p2 < x1 or y1>q2 or q1<y2:
+        print('d')
+        # c:
+    elif (p1 == x2 and q1 == y2) or (p1 == x2 and y1 == q2) or (x1 == p2 and q1 == y2) or (x1 == p2 and y1 == q2):
+        print('c')
+        #b:
+    elif p1 == x2 or x1 == p2 or q1 == y2 or y1 == q2:
+        print('b')
+
+    # a:
     else:
-        x_intersection = 2
+        print('a')
 
-    if y2 < y3 or y4<y1:
-        y_intersection = 0
-    elif y2 == y3 or y4 == y1:
-        y_intersection = 1
-    else:
-        y_intersection = 2
-
-    print(final[x_intersection][y_intersection])
