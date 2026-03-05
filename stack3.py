@@ -30,5 +30,3 @@ if result_num == arr_clone:
         print(result_char[i])
 elif result_num != arr_clone:
     print('NO')
-
-
