@@ -10,7 +10,7 @@ arr.sort(key=lambda x:(x[1],x[0]))
 cnt=0
 last_end_time=0
 for i in range(N):
-    if arr[i][0] > last_end_time:
+    if arr[i][0] >= last_end_time:
         last_end_time = arr[i][1] 
         cnt+=1
 
