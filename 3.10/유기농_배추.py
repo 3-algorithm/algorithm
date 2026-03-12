@@ -30,6 +30,7 @@ for tc in range(1,T+1):
     for i in range(K):
         c,r=map(int,input().split())
         land[r][c]=1
+        
     cnt=0
     for i in range(N):
         for j in range(M):
