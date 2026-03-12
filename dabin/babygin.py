@@ -14,7 +14,7 @@ def babygin(card):
 
         if cnt[j] >= 1 and cnt[j+1] >= 1 and cnt[j+2] >= 1:
             return True
-
+   
         j += 1
     return False
 
