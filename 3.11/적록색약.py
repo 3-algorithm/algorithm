@@ -10,7 +10,6 @@ visited = [[False]*N for _ in range(N)]
 dr = [-1,1,0,0]
 dc = [0,0,-1,1]
 
-#일반인
 def bfs(r,c):
     queue = deque()
     queue.append((r,c))
