@@ -1,6 +1,3 @@
-import sys
-input = sys.stdin.readline
-
 class CircularQueue:
     def __init__(self, size):
         self.size = size + 1
@@ -73,4 +70,4 @@ for _ in range(N):
     elif order == 'size':
         result.append(str(cq.currentSize()))
 
-sys.stdout.write('\n'.join(result) + '\n')
+print('\n'.join(result))
