@@ -2,7 +2,6 @@ import sys
 sys.stdin = open("input_gold.txt")
 
 def bfs(a, b):
-
     available_dir = []
     available_dir.append([a, b])
     visited[a][b] = 1
