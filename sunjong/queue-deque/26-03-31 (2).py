@@ -1,6 +1,8 @@
 # https://www.acmicpc.net/problem/18258
 
 from collections import deque
+import sys
+input = sys.stdin.readline
 
 n = int(input())
 
