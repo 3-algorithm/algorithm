@@ -16,7 +16,7 @@ for _ in range(n):
     elif cmd[0] == 'size':
         print(len(dq))
     elif cmd[0] == 'empty':
-        print(0 if not dq else 0)
+        print(1 if not dq else 0)
     elif cmd[0] == 'front':
         print(dq[0] if dq else -1)
     elif cmd[0] == 'back':
