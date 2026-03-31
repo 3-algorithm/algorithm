@@ -1,3 +1,6 @@
+import sys
+sys.stdin = open("input.txt")
+
 def cutting(matrix, n):
     global first_count, second_count, third_count
 
