@@ -1,6 +1,7 @@
 import sys
 input=sys.stdin.readline
 
+
 left_stack = list(sys.stdin.readline().rstrip())
 right_stack = []
 
