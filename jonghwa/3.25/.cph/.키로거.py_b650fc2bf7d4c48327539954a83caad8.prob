@@ -1,1 +1,1 @@
-{"name":"키로거","group":"Baekjoon Online Judge","url":"https://www.acmicpc.net/problem/5397","interactive":false,"memoryLimit":256,"timeLimit":1000,"tests":[{"id":1774836472760,"input":"2\n<<BP<A>>Cd-\nThIsIsS3Cr3t\n","output":"BAPC\nThIsIsS3Cr3t\n"}],"testType":"single","input":{"type":"stdin"},"output":{"type":"stdout"},"languages":{"java":{"mainClass":"Main","taskClass":"Task"}},"batch":{"id":"374b12dd-bd8d-4006-97b9-bb885719b18e","size":1},"srcPath":"c:\\Users\\SSAFY\\Desktop\\algorithm\\jonghwa\\3.25\\키로거.py"}
+
