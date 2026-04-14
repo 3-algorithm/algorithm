@@ -1,29 +1,20 @@
-#include <iostream>
-#include <vector>
 #include <deque>
-/*
-cpp 에서는 pop 의 반환 값이 없음으로 front, back method를 사용해야함.
+#include <vector>
 
-문제파악
-1. 트럭은 1초에 1m 전진
-2. 트럭의 크기는 1m인듯
-3. 다리 위에 weight 이상 무게가 올라가면 다리가 무너짐
-4. 그러면 도착할 때 바로 다음 트럭이 올라갈 수 있는지 확인 필요.
-*/
 using namespace std;
 
 int solution(int bridge_length, int weight, vector<int> truck_weights) {
     int answer = 0;
     int weight_now = 0;
-    deque<int> ready (truck_weights.begin(), truck_weights.end());
-    deque<int> bridge ( bridge_length, 0 );
-    while(!ready.empty()){
+    deque<int> ready(truck_weights.begin(), truck_weights.end());
+    deque<int> bridge(bridge_length, 0);
+    while (!ready.empty()) {
         answer += 1;
         weight_now += ready.front();
-        if (bridge.front()){
+        if (bridge.front()) {
             weight_now -= bridge.front();
         }
-        if(weight_now > weight){
+        if (weight_now > weight) {
             weight_now -= ready.front();
             bridge.push_back(0);
         } else {
@@ -32,7 +23,7 @@ int solution(int bridge_length, int weight, vector<int> truck_weights) {
         }
         bridge.pop_front();
     }
-    while(weight_now){
+    while (weight_now) {
         answer += 1;
         weight_now -= bridge.front();
         bridge.pop_front();
@@ -42,14 +33,9 @@ int solution(int bridge_length, int weight, vector<int> truck_weights) {
 
 // 풀이과정 :
 /*
-1. 다리를 건너는 트럭과 대기중인 트럭을 각각 bridge와 ready 라는 덱으로 표현한다.
-2. bridge 덱의 크기는 다리의 길이인 bridge_length로 초기화한다.
-3. ready 덱에서 트럭이 다리를 건너는 동안, bridge 덱의 맨 앞에 있는 트럭이 다리를 완전히 건넜는지 확인한다. 
-   만약 맨 앞에 있는 트럭이 다리를 완전히 건넜다면, 해당 트럭을 bridge 덱에서 제거하고 weight_now 변수에서 해당 트럭의 무게를 빼준다.
-4. 만약 ready 덱에서 트럭이 다리를 건너는 동안, bridge 덱의 맨 앞에 있는 트럭이 다리를 완전히 건넜다면, 
-   해당 트럭을 bridge 덱에서 제거하고 weight_now 변수에서 해당 트럭의 무게를 빼준다.
-5. ready 덱에서 트럭이 다리를 건너는 동안, bridge 덱의 맨 앞에 있는 트럭이 다리를 완전히 건넜는지 확인한다.
-   만약 맨 앞에 있는 트럭이 다리를 완전히 건넜다면, 해당 트럭을 bridge 덱에서 제거하고 weight_now 변수에서 해당 트럭의 무게를 빼준다.
-6. ready 덱이 빌때까지 반복하고, 이후에는 weight_now 변수가 0이 될 때까지 bridge 덱에서 트럭이 다리를 완전히 건넜는지 확인한다. 
-   만약 맨 앞에 있는 트럭이 다리를 완전히 건넜다면, 해당 트럭을 bridge 덱에서 제거하고 weight_now 변수에서 해당 트럭의 무게를 빼준다.
+1. 다리를 건너는 트럭과 대기 중인 트럭을 각각 bridge와 ready 덱으로 표현한다.
+2. bridge 덱은 다리 길이인 bridge_length만큼 0으로 초기화해, 비어 있는 칸까지 함께 관리한다.
+3. 매 초마다 bridge의 맨 앞 원소를 기준으로 다리에서 빠져나가는 트럭을 반영하고, weight_now에서 해당 무게를 빼준다.
+4. 그 다음 대기 중인 트럭의 무게를 더해도 제한 무게를 넘지 않으면 bridge 뒤에 트럭을 넣고, 넘으면 0을 넣어 한 칸 전진만 시킨다.
+5. ready 덱이 빌 때까지 위 과정을 반복한 뒤, 남아 있는 bridge의 트럭들이 모두 빠져나갈 때까지 시간을 추가로 계산한다.
 */

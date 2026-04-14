@@ -1,76 +1,79 @@
-/* BFS and Search All 
-    문제 
-    N X M 의 공간을 0,0부터 탐색하기 시작한다.
-    각 칸은 주소를 가지고 있는데, 예를 들어 2X5 공간이 있다면
-    각 주소는
-    1 2 3 4 5
-    6 7 8 9 10
-    이 된다.
-    
-    꼭 방문해야할 정점 n개가 주소 값으로 주어질 때, 
-    각 정점을 모두 방문하는 최단 경로를 찾는 문제이다.
+/*
+    BFS and Search All
 
-    입력예시 : 
-    N = 3, M = 4 P = [1, 2, 6, 7]
-    출력예시 : 6
-    */
-#include <string>
+    N x M grid starts at (0, 0).
+    Each cell has a 1-based address:
+    1  2  3  4  5
+    6  7  8  9 10
+
+    Given required addresses P, return the shortest path length needed to
+    visit every required address starting from (0, 0).
+*/
+#include <algorithm>
+#include <cstdlib>
+#include <limits>
 #include <vector>
-#include <deque>
-#include <iostream>
 
 using namespace std;
 
-vector<int> visit (10001, 0);
+namespace {
+vector<int> to_position(int address, int M) {
+    int zero_based = address - 1;
+    return {zero_based / M, zero_based % M};
+}
 
-vector<vector<int>> bfs(vector<vector<int>> map, vector<int> P, int N, int M){
-    deque<vector<int>> q;
-    vector<vector<int>> visited (N, vector<int>(M, 0));
-    vector<vector<int>> find (N, vector<int>(M, 0));
-    vector<vector<int>> delta = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    q.push_back(P);
-    while(!q.empty()){
-        vector<int> now = q.front();
-        q.pop_front();
-        for(vector<int> d : delta){
-            vector<int> next = {now[0] + d[0], now[1] + d[1]};
-            if(next[0] < 0 || next[0] >= N || next[1] < 0 || next[1] >= M){
+int manhattan_distance(const vector<int>& a, const vector<int>& b) {
+    return abs(a[0] - b[0]) + abs(a[1] - b[1]);
+}
+}  // namespace
+
+int solution(int N, int M, vector<int> P) {
+    (void)N;
+
+    if (P.empty()) {
+        return 0;
+    }
+
+    vector<vector<int>> positions;
+    positions.push_back({0, 0});
+    for (int address : P) {
+        positions.push_back(to_position(address, M));
+    }
+
+    int required_count = static_cast<int>(P.size());
+    vector<vector<int>> dist(required_count + 1, vector<int>(required_count + 1, 0));
+    for (int i = 0; i <= required_count; ++i) {
+        for (int j = i + 1; j <= required_count; ++j) {
+            dist[i][j] = manhattan_distance(positions[i], positions[j]);
+            dist[j][i] = dist[i][j];
+        }
+    }
+
+    const int inf = numeric_limits<int>::max() / 4;
+    int full_mask = (1 << required_count) - 1;
+    vector<vector<int>> dp(1 << required_count, vector<int>(required_count, inf));
+
+    for (int i = 0; i < required_count; ++i) {
+        dp[1 << i][i] = dist[0][i + 1];
+    }
+
+    for (int mask = 1; mask <= full_mask; ++mask) {
+        for (int current = 0; current < required_count; ++current) {
+            if ((mask & (1 << current)) == 0 || dp[mask][current] == inf) {
                 continue;
             }
-            int next_address = next[0] * M + next[1] + 1;
-            // 방문해야할 정점이면서 아직 방문하지 않은 경우
-            if(visit[next_address]){
-                visit[next_address] = 0;
-                return {next, {visited[now[0]][now[1]] + 1}};
-            }
-            if(!visit[next_address] && map[next[0]][next[1]] == 0){
-                q.push_back(next);
-                map[next[0]][next[1]] = map[now[0]][now[1]] + 1;
+
+            for (int next = 0; next < required_count; ++next) {
+                if (mask & (1 << next)) {
+                    continue;
+                }
+
+                int next_mask = mask | (1 << next);
+                int next_cost = dp[mask][current] + dist[current + 1][next + 1];
+                dp[next_mask][next] = min(dp[next_mask][next], next_cost);
             }
         }
     }
-}
 
-int solution(int N, int M, vector<int> P){
-    int answer = 0;
-    vector<vector<int>> map (N, vector<int>(M, 0));
-    for (int p : P){
-        visit[p] = 1;
-    }
-    for (int p : P){
-        vector<vector<int>> result = bfs(map, {p/M, p%M}, N, M);
-        if(result.empty()){
-            return -1;
-        }
-        answer += result[1][0];
-    }
-    
-    return answer;
-}
-
-// main 함수는 테스트용입니다. 프로그램 제출 시 main 함수는 제거해주세요.
-int main(){
-    int N = 3, M = 4;
-    vector<int> P = {1, 2, 6, 7};
-    cout << solution(N, M, P) << endl;
+    return *min_element(dp[full_mask].begin(), dp[full_mask].end());
 }

@@ -1,49 +1,42 @@
-#include <string>
-#include <vector>
 #include <deque>
+#include <set>
+#include <vector>
 
 using namespace std;
 
-int find_max(deque<int> lst){
-    int max = 0;
-    for(int i=0; i<lst.size(); i++){
-        if(lst[i] > max){
-            max = lst[i];
-        }
-    }
-    return max;
-}
-
 int solution(vector<int> priorities, int location) {
     int answer = 0;
-    deque<int> deq (priorities.begin(), priorities.end());
-    int max = find_max(deq);
-    while(!deq.empty()){
-        if(deq.front() == max){
+    deque<int> deq(priorities.begin(), priorities.end());
+    multiset<int> priority_set(priorities.begin(), priorities.end());
+
+    while (!deq.empty()) {
+        int current_max = *priority_set.rbegin();
+        if (deq.front() == current_max) {
+            priority_set.erase(priority_set.find(deq.front()));
             deq.pop_front();
-            answer += 1;
-            location -= 1;
-            max = find_max(deq);
+            ++answer;
+            --location;
         } else {
             deq.push_back(deq.front());
             deq.pop_front();
-            location -= 1;
-            if(location < 0){
-                location = deq.size() - 1;
-            }
+            --location;
         }
-        if(location < 0){
-            break;
+
+        if (location < 0) {
+            if (deq.empty()) {
+                break;
+            }
+            location = static_cast<int>(deq.size()) - 1;
         }
     }
+
     return answer;
 }
 
 // 풀이과정 :
 /*
-1. 우선순위가 가장 높은 문서가 현재 큐의 맨 앞에 있는지 확인한다.
-2. 만약 우선순위가 가장 높은 문서가 현재 큐의 맨 앞에 있다면, 해당 문서를 출력한다.
-3. 만약 우선순위가 가장 높은 문서가 현재 큐의 맨 앞에 없다면, 해당 문서를 큐의 맨 뒤로 보낸다.
-4. 문서가 출력될 때마다 location 변수를 1씩 감소시킨다
-5. location 변수가 0이 되는 경우, 해당 문서가 출력된 것이므로 answer 변수를 1 증가시킨다.
+1. 큐의 맨 앞 문서와 현재 문서들 중 최고 우선순위를 비교한다.
+2. 최고 우선순위 문서라면 출력하고, 아니라면 큐의 뒤로 보낸다.
+3. 출력될 때마다 answer를 증가시키고, location은 현재 큐 기준으로 함께 이동시킨다.
+4. location이 음수가 되면 현재 큐의 마지막 인덱스로 보정해 같은 문서를 계속 추적한다.
 */
