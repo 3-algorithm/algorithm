@@ -1,15 +1,14 @@
 import sys
 input=sys.stdin.readline
 
-
-left_stack = list(sys.stdin.readline().rstrip())
+left_stack = list(input().rstrip())
 right_stack = []
 
 # 명령어의 개수
-m = int(sys.stdin.readline())
+m = int(input())
 
 for _ in range(m):
-    command = sys.stdin.readline().split()
+    command = input().split()
     
     if command[0] == 'L':
         # 커서를 왼쪽으로 이동
